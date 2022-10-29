@@ -1,4 +1,6 @@
 import {Request, Response} from 'express';
+import {Person} from './Person';
+
 
 const express = require('express');
 const port = 3000;
@@ -6,21 +8,20 @@ const port = 3000;
 const app = express();
 app.use(express.json());
 
-const array: any[] = [];
+const array: Person[] = [];
 
 app.get('/', (req: Request, res: Response) => {
     res.send(array);
 });
 
 app.post('/', (req: Request, res: Response) => {
-    const value = req.body?.value;
-    let index: number = 0;
+    const value = req.body as Person;
 
     if (value) {
-        index = array.push(req.body?.value)
+        const index = array.push(value)
         res.send(`OK - new index: ${index}`);
     } else {
-        res.send(`Undefined value!`);
+        res.send(`Invalid value!`);
     }
 });
 
