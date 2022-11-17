@@ -10,4 +10,16 @@ export class UserInfo {
         this.phone = phone;
         this.email = email;
     }
+    setName(name: string) {
+        this.name = name;
+    }
+    setAddress(address: string) {
+        this.address = address;
+    }
+    setPhone(phone: string) {
+        this.phone = phone;
+    }
+    setEmail(email: string) {
+        this.email = email;
+    }
 }

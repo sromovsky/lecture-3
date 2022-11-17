@@ -19,22 +19,25 @@ export class User {
     getUserId() {
         return this.userId;
     }
-
     getUserInfo() {
+        return this.userInfo;
+    }
+
+    getPrintableUserInfo() {
         let userInfo = {
             "userId": this.userId,
             "userInfo": this.userInfo
         }
         return userInfo;
     }
-    getInvoices() {
+    getPrintableInvoices() {
         let userInvoices = {
             "userId": this.userId,
             "Invoices": this.invoices
         }
         return userInvoices;
     }
-    getServices() {
+    getPrintableServices() {
         let userServices = {
             "userId": this.userId,
             "Services": this.services
