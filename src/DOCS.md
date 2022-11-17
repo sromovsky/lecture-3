@@ -339,3 +339,115 @@ Keep-Alive: timeout=5
     ]
 }
 ```
+### GET - _Get all invoices for selected user_
+Route - _https://localhost:3000/users/:id/invoices_
+
+Example response:
+```
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 175
+ETag: W/"af-8m/LuFcD0A0gReM87bo+uPApoc0"
+Date: Thu, 17 Nov 2022 17:59:14 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+[
+    {
+        "id": 1,
+        "services": [
+            {
+                "id": 1,
+                "name": "Web - test.xyz",
+                "price": 3.99
+            }
+        ],
+        "totalPrice": 3.99
+    },
+    {
+        "id": 2,
+        "services": [
+            {
+                "id": 2,
+                "name": "Virtual Server",
+                "price": 25.99
+            }
+        ],
+        "totalPrice": 25.99
+    }
+]
+```
+### GET - _Get specific invoice for selected user_
+Route - _https://localhost:3000/users/:userid/invoices/:invoiceid_
+
+Example response:
+```
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 85
+ETag: W/"55-R3pRkzY9wrku1W0vqfxsvcoiWiU"
+Date: Thu, 17 Nov 2022 17:59:24 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{
+    "id": 1,
+    "services": [
+        {
+            "id": 1,
+            "name": "Web - test.xyz",
+            "price": 3.99
+        }
+    ],
+    "totalPrice": 3.99
+}
+```
+### GET - _Get all services for selected user_
+Route - _https://localhost:3000/users/:id/services_
+
+Example response:
+```
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 94
+ETag: W/"5e-ceZbhzwawRbSnZM0kF0Phbl0HfY"
+Date: Thu, 17 Nov 2022 18:05:03 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+[
+    {
+        "id": 1,
+        "name": "Web - test.xyz",
+        "price": 3.99
+    },
+    {
+        "id": 2,
+        "name": "Virtual Server",
+        "price": 25.99
+    }
+]
+```
+### GET - _Get specific service for selected user_
+Route - _https://localhost:3000/users/:userid/services/:serviceid_
+
+Example response:
+```
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 45
+ETag: W/"2d-84GrzMJ0jIy3coRmxETKG2pOoiM"
+Date: Thu, 17 Nov 2022 18:05:05 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{
+    "id": 1,
+    "name": "Web - test.xyz",
+    "price": 3.99
+}
+```

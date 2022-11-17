@@ -9,7 +9,10 @@ export class Service {
         this.price = price;
 
     }
-
+    
+    getServiceId() {
+        return this.id;
+    }
     getPrice() {
         return this.price;
     }

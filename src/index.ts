@@ -33,8 +33,13 @@ let userArr: User[] = [user1, user2];
 
 //Error messages
 const userDoesntExist = { 'Error': '400 - Bad Request', 'Info': 'User doesn\'t exist' };
-const missingReqParameters = { 'Error': '400 - Bad Request', 'Missing': 'Required parameters' };
 const userExists = { 'Error': '400 - Bad Request', 'Info': 'User with ID already exists' };
+
+const invoiceDoesntExist = { 'Error': '400 - Bad Request', 'Info': 'Invoice doesn\'t exist' };
+
+const serviceDoesntExist = { 'Error': '400 - Bad Request', 'Info': 'Service doesn\'t exist' };
+
+const missingReqParameters = { 'Error': '400 - Bad Request', 'Missing': 'Required parameters' };
 
 // Get all data from all arrays
 app.get('/', (req: Request, res: Response) => {
@@ -134,6 +139,64 @@ app.get('/users/:id/all', (req: Request, res: Response) => {
     const index = userArr.findIndex(user => user.getUserId() === id);
     if (index != -1) {
         res.status(200).send(userArr[index]);
+    } else {
+        res.status(400).send(userDoesntExist);
+    }
+});
+
+// Get all invoices for selected user
+app.get('/users/:id/invoices', (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const index = userArr.findIndex(user => user.getUserId() === id);
+    if (index != -1) {
+        res.status(200).send(userArr[index].getUserInvoices());
+    } else {
+        res.status(400).send(userDoesntExist);
+    }
+});
+
+// Get specific invoice for selected user
+app.get('/users/:userid/invoices/:invoiceid', (req: Request, res: Response) => {
+    const userId = Number(req.params.userid);
+    const userIndex = userArr.findIndex(user => user.getUserId() === userId);
+    if (userIndex != -1) {
+        const allUserInvoices = userArr[userIndex].getUserInvoices();
+        const invoiceId = Number(req.params.invoiceid);
+        const invoiceIndex = allUserInvoices.findIndex(invoice => invoice.getInvoiceId() === invoiceId);
+        if (invoiceIndex != -1) {
+            res.status(200).send(allUserInvoices[invoiceIndex]);
+        } else {
+            res.status(400).send(invoiceDoesntExist);
+        }
+    } else {
+        res.status(400).send(userDoesntExist);
+    }
+});
+
+// Get all services for selected user
+app.get('/users/:id/services', (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const index = userArr.findIndex(user => user.getUserId() === id);
+    if (index != -1) {
+       res.status(200).send(userArr[index].getUserServices());
+    } else {
+        res.status(400).send(userDoesntExist);
+    }
+});
+
+// Get specific service for selected user
+app.get('/users/:userid/services/:serviceid', (req: Request, res: Response) => {
+    const userId = Number(req.params.userid);
+    const userIndex = userArr.findIndex(user => user.getUserId() === userId);
+    if (userIndex != -1) {
+        const allUserServices = userArr[userIndex].getUserServices();
+        const serviceId = Number(req.params.serviceid);
+        const serviceIndex = allUserServices.findIndex(service => service.getServiceId() === serviceId);
+        if (serviceIndex != -1) {
+            res.status(200).send(allUserServices[serviceIndex]);
+        } else {
+            res.status(400).send(serviceDoesntExist);
+        }
     } else {
         res.status(400).send(userDoesntExist);
     }

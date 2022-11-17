@@ -12,11 +12,13 @@ export class Invoice {
         this.totalPrice = this.getTotalPrice();
 
     }
-
+    
+    getInvoiceId() {
+        return this.id;
+    }
     getServices(){
         return this.services;
     }
-
     getTotalPrice() {
         let totalPrice: number = 0;
         for (let i = 0; i < this.services.length; i++) {

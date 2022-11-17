@@ -22,6 +22,12 @@ export class User {
     getUserInfo() {
         return this.userInfo;
     }
+    getUserInvoices() {
+        return this.invoices;
+    }
+    getUserServices() {
+        return this.services
+    }
 
     getPrintableUserInfo() {
         let userInfo = {
