@@ -32,7 +32,7 @@ app.get('/services', (req: Request, res: Response) => {
 });
 
 app.post('/users', (req: Request, res: Response) => {
-    if (req.body.name.length !== undefined && req.body.address !== undefined && req.body.phone !== undefined && req.body.email !== undefined) {
+    if (req.body.name !== undefined && req.body.address !== undefined && req.body.phone !== undefined && req.body.email !== undefined) {
         const id = usrArray.length + 1;
         const value = new User(id ,req.body.name, req.body.address, req.body.phone, req.body.email);
         usrArray.push(value);
@@ -42,13 +42,14 @@ app.post('/users', (req: Request, res: Response) => {
     }
 });
 
-app.post('/users/delete', (req: Request, res: Response) => {
-    if (req.body.id !== undefined) {
-        const removedUser = usrArray.filter(usr => usr.getId() == req.body.id);
-        usrArray = usrArray.filter(usr => usr.getId() !== req.body.id);
+app.delete('/users/delete/:id', (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const removedUser = usrArray.filter(usr => usr.getId() == id);
+    if (removedUser.length > 0) {
+        usrArray = usrArray.filter(user => user.getId() !== id);
         res.status(200).send(removedUser);
     } else {
-        res.status(400).send({'Error':'400 - Bad Request', 'Missing': 'Required parameters'});
+        res.status(400).send({'Error':'400 - Bad Request', 'Info': 'ID not found'});
     }
 });
 
