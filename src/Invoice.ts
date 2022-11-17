@@ -14,4 +14,8 @@ export class Invoice {
         this.totalPrice = totalPrice;
 
     }
+    
+    getServices(){
+        return this.services;
+    }
 }
