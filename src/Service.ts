@@ -16,4 +16,11 @@ export class Service {
     getPrice() {
         return this.price;
     }
+
+    setName(name: string) {
+        this.name = name;
+    }
+    setPrice(price: number) {
+        this.price = price;
+    }
 }

@@ -50,4 +50,11 @@ export class User {
         }
         return userServices;
     }
+
+    addUserService(service: Service) {
+        this.services.push(service);
+    }
+    removeUserService(id: number) {
+        this.services = this.services.filter(service => service.getServiceId() != id);
+    }
 }
