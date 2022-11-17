@@ -3,19 +3,25 @@ import { Service } from "./Service";
 
 export class Invoice {
     private id: number;
-    private user: User;
     private services: Service[];
     private totalPrice: number;
 
-    constructor(id: number, user: User, services: Service[], totalPrice: number) {
+    constructor(id: number, services: Service[]) {
         this.id = id;
-        this.user = user;
         this.services = services;
-        this.totalPrice = totalPrice;
+        this.totalPrice = this.getTotalPrice();
 
     }
-    
+
     getServices(){
         return this.services;
+    }
+
+    getTotalPrice() {
+        let totalPrice: number = 0;
+        for (let i = 0; i < this.services.length; i++) {
+            totalPrice += this.services[i].getPrice();
+        }
+        return totalPrice;
     }
 }
