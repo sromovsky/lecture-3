@@ -66,9 +66,9 @@ app.post('/users', (req: Request, res: Response) => {
 // Get all info about specific user
 app.get('/users/:id', (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const requestedUser = userArr.filter(user => user.getUserId() == id);
-    if (requestedUser.length > 0) {
-        res.status(200).send(requestedUser[0].getPrintableUserInfo());
+    const index = userArr.findIndex(user => user.getUserId() === id);
+    if (index != -1) {
+        res.status(200).send(userArr[index].getPrintableUserInfo());
     } else {
         res.status(400).send(userDoesntExist);
     }
@@ -77,8 +77,8 @@ app.get('/users/:id', (req: Request, res: Response) => {
 // Create user with specific ID
 app.post('/users/:id', (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const existingUser = userArr.filter(user => user.getUserId() == id);
-    if (existingUser.length > 0) {
+    const index = userArr.findIndex(user => user.getUserId() === id);
+    if (index == -1) {
         res.status(400).send(userExists);
     } else {
         if (req.body.name !== undefined && req.body.address !== undefined && req.body.phone !== undefined && req.body.email !== undefined) { 
@@ -131,9 +131,9 @@ app.delete('/users/:id', (req: Request, res: Response) => {
 //Get all user info including invoices & services
 app.get('/users/:id/all', (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const requestedUser = userArr.filter(user => user.getUserId() == id);
-    if (requestedUser.length > 0) {
-        res.status(200).send(requestedUser[0]);
+    const index = userArr.findIndex(user => user.getUserId() === id);
+    if (index != -1) {
+        res.status(200).send(userArr[index]);
     } else {
         res.status(400).send(userDoesntExist);
     }
