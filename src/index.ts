@@ -63,7 +63,7 @@ app.post('/users', (req: Request, res: Response) => {
     }
 });
 
-// Get all info about specific user
+// Get info about specific user
 app.get('/users/:id', (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const index = userArr.findIndex(user => user.getUserId() === id);
@@ -78,7 +78,7 @@ app.get('/users/:id', (req: Request, res: Response) => {
 app.post('/users/:id', (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const index = userArr.findIndex(user => user.getUserId() === id);
-    if (index == -1) {
+    if (index != -1) {
         res.status(400).send(userExists);
     } else {
         if (req.body.name !== undefined && req.body.address !== undefined && req.body.phone !== undefined && req.body.email !== undefined) { 
@@ -92,7 +92,7 @@ app.post('/users/:id', (req: Request, res: Response) => {
     }
 });
 
-// Edit existing User
+// Edit existing user
 app.put('/users/:id', (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const index = userArr.findIndex(user => user.getUserId() === id);
@@ -109,7 +109,7 @@ app.put('/users/:id', (req: Request, res: Response) => {
         if(req.body.email) {
             userArr[index].getUserInfo().setEmail(req.body.email);
         }
-        res.status(200).send(userArr[index]);
+        res.status(200).send(userArr[index].getPrintableUserInfo());
     } else {
         res.status(400).send(userDoesntExist);
     }
