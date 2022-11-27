@@ -23,6 +23,9 @@ export class User {
         return this.userInfo;
     }
     getUserInvoices() {
+        for(let i = 0; i < this.invoices.length; i++) {
+            this.invoices[i].recalculateTotalPrice();
+        }
         return this.invoices;
     }
     getUserServices() {
@@ -56,5 +59,11 @@ export class User {
     }
     removeUserService(id: number) {
         this.services = this.services.filter(service => service.getServiceId() != id);
+    }
+    addUserInvoice(invoice: Invoice) {
+        this.invoices.push(invoice);
+    }
+    removeUserInvoice(id: number) {
+        this.invoices = this.invoices.filter(invoice => invoice.getInvoiceId() != id);
     }
 }

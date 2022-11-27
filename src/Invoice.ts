@@ -1,4 +1,3 @@
-import { User } from "./User";
 import { Service } from "./Service";
 
 export class Invoice {
@@ -25,5 +24,16 @@ export class Invoice {
             totalPrice += this.services[i].getPrice();
         }
         return totalPrice;
+    }
+    recalculateTotalPrice() {
+        let totalPrice: number = 0;
+        for (let i = 0; i < this.services.length; i++) {
+            totalPrice += this.services[i].getPrice();
+        }
+        this.totalPrice = totalPrice; 
+    }
+    
+    removeService(id: number) {
+        this.services = this.services.filter(service => service.getServiceId() != id);
     }
 }

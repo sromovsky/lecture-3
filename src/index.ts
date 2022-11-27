@@ -149,6 +149,50 @@ app.get('/users/:id/invoices', (req: Request, res: Response) => {
     }
 });
 
+// Create new invoice for user with or without services
+app.put('/users/:userid/invoices/', (req: Request, res: Response) => {
+    const userIndex = userArr.findIndex(user => user.getUserId() === Number(req.params.userid));
+    let newInvoice: Invoice;
+    if (userIndex != -1) {
+        const allUserInvoices = userArr[userIndex].getUserInvoices()
+        const id = allUserInvoices[allUserInvoices.length - 1].getInvoiceId() + 1;
+        if (req.body.services) {
+            let servicesArray: Service[] = [];
+            const allUserServices = userArr[userIndex].getUserServices();
+            for (let i = 0; i < req.body.services.length; i++ ) {
+                const serviceIndex = allUserServices.findIndex(service => service.getServiceId() === Number(req.body.services[i]));
+                servicesArray.push(allUserServices[serviceIndex]);
+            }
+            newInvoice = new Invoice(id, servicesArray);
+        }
+        else {
+            newInvoice = new Invoice(id, []);
+        }
+        userArr[userIndex].addUserInvoice(newInvoice);
+        res.status(200).send(allUserInvoices);
+    } else {
+        res.status(400).send(userDoesntExist);
+    }
+});
+
+// Remove invoice of user
+app.delete('/users/:userid/invoices/:invoiceid', (req: Request, res: Response) => {
+    const userIndex = userArr.findIndex(user => user.getUserId() === Number(req.params.userid));
+    if (userIndex != -1) {
+        const userInvoices = userArr[userIndex].getUserInvoices();
+        const invoiceIndex: number = userInvoices.findIndex(invoice => invoice.getInvoiceId() === Number(req.params.invoiceid));
+        if (invoiceIndex != -1) {
+            const removedInvoice = userInvoices.filter(invoice => invoice.getInvoiceId() == Number(req.params.invoiceid));
+            userArr[userIndex].removeUserInvoice(Number(req.params.invoiceid));
+            res.status(200).send(removedInvoice);
+        } else {
+            res.status(400).send(invoiceDoesntExist);
+        }
+    } else {
+        res.status(400).send(userDoesntExist);
+    }
+});
+
 // Get specific invoice for selected user
 app.get('/users/:userid/invoices/:invoiceid', (req: Request, res: Response) => {
     const userId = Number(req.params.userid);
@@ -159,6 +203,30 @@ app.get('/users/:userid/invoices/:invoiceid', (req: Request, res: Response) => {
         const invoiceIndex = allUserInvoices.findIndex(invoice => invoice.getInvoiceId() === invoiceId);
         if (invoiceIndex != -1) {
             res.status(200).send(allUserInvoices[invoiceIndex]);
+        } else {
+            res.status(400).send(invoiceDoesntExist);
+        }
+    } else {
+        res.status(400).send(userDoesntExist);
+    }
+});
+
+// Remove service from invoice
+app.delete('/users/:userid/invoices/:invoiceid/services/:serviceid', (req: Request, res: Response) => {
+    const userIndex = userArr.findIndex(user => user.getUserId() === Number(req.params.userid));
+    if (userIndex != -1) {
+        const allUserInvoices = userArr[userIndex].getUserInvoices()
+        const invoiceIndex: number = allUserInvoices.findIndex(invoice => invoice.getInvoiceId() === Number(req.params.invoiceid));
+        if (invoiceIndex != -1) {
+            const allInvoicedServices = allUserInvoices[invoiceIndex].getServices();
+            const serviceIndex: number = allInvoicedServices.findIndex(service => service.getServiceId() === Number(req.params.serviceid));
+            if (serviceIndex != -1) {
+                const removedService = allInvoicedServices[serviceIndex];
+                allUserInvoices[invoiceIndex].removeService(Number(req.params.serviceid));
+                res.status(200).send(removedService);
+            } else {
+                res.status(400).send(serviceDoesntExist);
+            }   
         } else {
             res.status(400).send(invoiceDoesntExist);
         }

@@ -41,8 +41,19 @@ _https://localhost:3000/users/:id_
 _https://localhost:3000/users/:id/all_
 ### GET - _Get all invoices for selected user_
 _https://localhost:3000/users/:id/invoices_
+### POST - _Create new invoice for user with or without services_
+_https://localhost:3000/users/:id/invoices_
+
+POST request payload
+```
+services (Array of IDs of user services - optional)
+```
+### DELETE - _Delete invoice of user_
+_https://localhost:3000/users/:userid/invoices/:invoiceid_
 ### GET - _Get specific invoice for selected user_
 _https://localhost:3000/users/:userid/invoices/:invoiceid_
+### DELETE - _Delete service from invoice of user_
+_https://localhost:3000/users/:userid/invoices/:invoiceid/services/:serviceid_
 ### GET - _Get all services for selected user_
 _https://localhost:3000/users/:id/services_
 ### POST - _Create new service for selected user_
