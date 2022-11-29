@@ -1,7 +1,5 @@
 import {Request, Response} from 'express';
-import {Person} from './Person';
-
-//test
+import {Team} from './Teams';
 
 const express = require('express');
 const port = 3000;
@@ -9,116 +7,58 @@ const port = 3000;
 const app = express();
 app.use(express.json());
 
-const p1 = new Person(1, "Tomas", 25);
-const p2 = new Person(2, "Filip", 15);
-const p3 = new Person(3, "David", 20);
+const Brazil = new Team(1, "Brazília", 3.50);
+const France = new Team(4, "Francúzsko", 6.50);
+const Spain = new Team(7, "Španielsko", 7.28);
+const Argentina = new Team(3, "Argentína", 8.50);
+const England = new Team(5, "Anglicko", 11.00);
+const Portugal = new Team(9, "Portugalsko", 12.00);
+const Germany = new Team(11, "Nemecko", 13.00);
+const Netherlands = new Team(8, "Holandsko", 15.00);
+const Denmark = new Team(10, "Dánsko", 60.00);
+const Croatia = new Team(12, "Chorvátsko", 60.00);
+const Belgium = new Team(2, "Belgicko", 70.00);
+const Uruguay = new Team(14, "Uruguaj", 90.00);
+const Switzerland = new Team(15, "Švajčiarsko", 95.00);
+const Senegal = new Team(18, "Senegal", 100.00);
+const Morocco = new Team(22, "Maroko", 130.00);
+const Serbia = new Team(21, "Srbsko", 130.00);
+const USA = new Team(16, "USA", 150.00);
+const Poland = new Team(26, "Polsko", 150.00);
+const Japan = new Team(24, "Japonsko", 250.00);
+const Ghana = new Team(61, "Ghana", 333.00);
+const Australia = new Team(38, "Austrália", 350.00);
+const Iran = new Team(20, "Irán", 350.00);
+const Saudi_Arabia = new Team(51, "Saudská Arábia", 400.00);
+const Korea_Republic = new Team(28, "Južná Kórea", 505.00);
+const Mexico = new Team(13, "Mexiko", 750.00);
+const Cameroon = new Team(43, "Kamerun", 750.00);
+const Wales = new Team(19, "Wales", 1000.00);
+const Costa_Rica = new Team(31, "Kostarika", 1200.00);
+const Tunisia = new Team(30, "Tunisko", 2000.00);
 
-p1.addScore(5);
-p1.addScore(9);
-p1.addScore(10);
-
-p2.addScore(5);
-p2.addScore(15);
-
-p3.addScore(5);
-p3.addScore(9);
-
-let array: Person[] = [p1, p2, p3];
+let array: Team[] = [Brazil, France, Spain, Argentina, England, Portugal, Germany, Netherlands, Croatia, Denmark, Belgium, Uruguay,Switzerland, Senegal, Morocco,
+    Serbia, Poland, USA, Japan, Ghana, Australia, Iran, Saudi_Arabia, Korea_Republic, Mexico, Cameroon, Wales, Costa_Rica, Tunisia];
 
 app.get('/', (req: Request, res: Response) => {
-    res.send({autor: 'Tomas Sromovsky'});
+    res.send(array);
 });
 
 app.get('/users', (req: Request, res: Response) => {
     const score = Number(req.query.withScore);
 
-    console.log(score);
 
-    let result;
 
-    if (score) {
-        result = array.filter(user => user.getScore().includes(score))
-    } else {
-        result = array;
-    }
+    let result = array;
 
     res.send(result.map(user => {
         return {
-            id: user.getId(),
-            name: user.getName()
+            World_Ranking: user.getWorld_Ranking(),
+            Country: user.getCountry(),
+            Win_Odds: user.getWinOdds()
+
         }
     }));
-});
-
-app.get('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user);
-    } else {
-        res.send({});
-    }
-});
-
-app.get('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user.getScore());
-    } else {
-        res.send('not found');
-    }
-});
-
-app.post('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        user.addScore(req.body.value);
-        res.send('DONE!');
-    } else {
-        res.send('not found');
-    }
-});
-
-app.put('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-
-            user.setName(req.body.name);
-            user.setAge(req.body.age);
-
-            res.send(`OK - user with id: ${user.getId()} UPDATED!`);
-        } else {
-            res.send(`Invalid value!`);
-        }
-    } else {
-        res.send('User not found!');
-    }
-});
-
-app.delete('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    array = array.filter(user => user.getId() !== id);
-    res.send(`Id: ${id} DELETED!`);
-});
-
-app.post('/users', (req: Request, res: Response) => {
-    if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-        const id = array.length + 1;
-        const value = new Person(id ,req.body.name, req.body.age);
-        const index = array.push(value);
-        res.send(`OK - new id: ${id}`);
-    } else {
-        res.send(`Invalid value!`);
-    }
 });
 
 app.listen(port, () => {
