@@ -45,8 +45,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/users', (req: Request, res: Response) => {
-    const score = Number(req.query.withScore);
-
 
 
     let result = array;
