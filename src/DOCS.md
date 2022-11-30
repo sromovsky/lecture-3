@@ -49,7 +49,8 @@ ak chceme vytvorit novy zaznam v PlayList potrebujeme si vziat strukturu
 niektoreho zannamu z GET. tu strukturu vlozim a upravim jej obsah si 
 zmenim aby obsahoval novy zaznam do PlayList
 to vlozim raw body v formate JSON bez id
-kedze id sa vytvori automaticky pri vykonani POST. 
+kedze id sa vytvori automaticky pri vykonani POST.
+
 ---
 
 ---
