@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {Person} from './Person';
+import {Cyclist} from './Cyclist';
 
 //test
 
@@ -9,113 +9,102 @@ const port = 3000;
 const app = express();
 app.use(express.json());
 
-const p1 = new Person(1, "Tomas", 25);
-const p2 = new Person(2, "Filip", 15);
-const p3 = new Person(3, "David", 20);
+const p1 = new Cyclist(1, "Peter Sagan", 30, "Bora");
+const p2 = new Cyclist(2, "Chris Froome", 28, "Sky");
+const p3 = new Cyclist(3, "Martin Velits", 34, "Quickstep");
+const p4 = new Cyclist(4, "Lance Armstrong", 35, "Astana")
 
-p1.addScore(5);
-p1.addScore(9);
-p1.addScore(10);
-
-p2.addScore(5);
-p2.addScore(15);
-
-p3.addScore(5);
-p3.addScore(9);
-
-let array: Person[] = [p1, p2, p3];
+let array: Cyclist[] = [p1, p2, p3, p4];
 
 app.get('/', (req: Request, res: Response) => {
-    res.send({autor: 'Tomas Sromovsky'});
+    res.send({autor: 'Martin Petrik'});
 });
 
-app.get('/users', (req: Request, res: Response) => {
-    const score = Number(req.query.withScore);
+app.get('/Cyclist', (req: Request, res: Response) => {
+    const teamName = String(req.query.withteamName);
 
-    console.log(score);
-
+    console.log(teamName);
     let result;
 
-    if (score) {
-        result = array.filter(user => user.getScore().includes(score))
-    } else {
-        result = array;
+    if (teamName) {
+        result = array.filter(Cyclist => Cyclist.getteamName().includes(teamName))
+    }else
+    {
+        result=array;
     }
-
-    res.send(result.map(user => {
+    res.send(result.map(Cyclist => {
         return {
-            id: user.getId(),
-            name: user.getName()
+            position: Cyclist.getCyclist(),
+            name: Cyclist.getName()
         }
     }));
 });
 
-app.get('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user);
+app.get('/Cyclists/:position', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
+    const user = array.find(Cyclist => Cyclist.getposition() === position);
+    if (Cyclist) {
+        res.send(Cyclist);
     } else {
         res.send({});
     }
 });
 
-app.get('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+app.get('/Cyclists/:position/teamName', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
 
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user.getScore());
+    const Cyclist = array.find(Cyclist => Cyclist.getposition() === position);
+    if (Cyclist) {
+        res.send(Cyclist.getteamName());
     } else {
-        res.send('not found');
+        res.send('Not Found');
     }
 });
 
-app.post('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+app.post('/Cyclists/:position/teamName', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
 
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        user.addScore(req.body.value);
+    const Cyclist = array.find(Cyclist => Cyclist.getposition() === position);
+    if (Cyclist) {
+        Cyclist.addteamName(req.body.value);
         res.send('DONE!');
     } else {
         res.send('not found');
     }
 });
 
-app.put('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+app.put('/Cyclists/:position', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
 
-    const user = array.find(user => user.getId() === id);
-    if (user) {
+    const Cyclist = array.find(Cyclist => Cyclist.getposition() === position);
+    if (Cyclist) {
         if (req.body.name?.length >= 3 && req.body.age !== undefined) {
 
-            user.setName(req.body.name);
-            user.setAge(req.body.age);
+            Cyclist.setName(req.body.name);
+            Cyclist.setAge(req.body.age);
 
-            res.send(`OK - user with id: ${user.getId()} UPDATED!`);
+            res.send(`OK - Cyclist with position: ${Cyclist.getposition()} UPDATED!`);
         } else {
-            res.send(`Invalid value!`);
+            res.send(`Invalposition value!`);
         }
     } else {
-        res.send('User not found!');
+        res.send('Cyclist not found!');
     }
 });
 
-app.delete('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+app.delete('/Cyclists/:position', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
 
-    array = array.filter(user => user.getId() !== id);
-    res.send(`Id: ${id} DELETED!`);
+    array = array.filter(Cyclist => Cyclist.getposition() !== position);
+    res.send(`position: ${position} DELETED!`);
 });
 
-app.post('/users', (req: Request, res: Response) => {
+app.post('/Cyclists/s', (req: Request, res: Response) => {
     if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-        const id = array.length + 1;
-        const value = new Person(id ,req.body.name, req.body.age);
+        const position = array.length + 1;
+        const value = new Cyclist(position ,req.body.name, req.body.age, req.teamName);
         const index = array.push(value);
-        res.send(`OK - new id: ${id}`);
+        res.send(`OK - new position: ${position}`);
     } else {
         res.send(`Invalid value!`);
     }
