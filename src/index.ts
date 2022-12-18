@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {Person} from './Person';
+import {Fighter} from './Fighter';
 
 //test
 
@@ -9,27 +9,34 @@ const port = 3000;
 const app = express();
 app.use(express.json());
 
-const p1 = new Person(1, "Tomas", 25);
-const p2 = new Person(2, "Filip", 15);
-const p3 = new Person(3, "David", 20);
+const Brandon_Moreno   =  new Fighter("Brandon Moreno",   32, "Mexico",         57);
+const Kai_Kara_France  =  new Fighter("Kai Kara France",  27, "New Zealand",    54);
+const Peter_Yan        =  new Fighter("Peter Yan",        24, "Russia",         61);
+const TJ_Dillashaw     =  new Fighter("TJ Dillashaw",     22, "America",        61);
+const Max_Holloway     =  new Fighter("Max Holloway",     35, "America",        65);
+const Brian_Ortega     =  new Fighter("Brian Ortega",     31, "America",        66);
+const Dustin_Poirier   =  new Fighter("Dustin Poirier",   38, "America",        70);
+const Justin_Gaethje   =  new Fighter("Justin_Gaethje",   37, "America",        70);
+const Colby_Covington  =  new Fighter("Colby Covington",  28, "America",        77);
+const Leon_Edwards     =  new Fighter("Leon Edwards",     25, "New Britain",    77);
+const Robert_Whittaker =  new Fighter("Robert Whittaker", 20, "New Zealand",    84);
+const Jared_Cannonier  =  new Fighter("Jared Cannonier",  31, "America",        84);
+const Jan_Blachowicz   =  new Fighter("Jan Blachowicz",   34, "Poland",         93);
+const Jiri_Prochazka   =  new Fighter("Jiri Prochazka",   29, "Czech Republic", 93);
+const Ciryl_Gane       =  new Fighter("Ciryl Gane",       35, "France",         112);
+const Stipe_Miocic     =  new Fighter("Stipe Miocic",     36, "America",        109);
+const Zhang_Weili      =  new Fighter("Zhang Weili",      25, "China",          52);
 
-p1.addScore(5);
-p1.addScore(9);
-p1.addScore(10);
-
-p2.addScore(5);
-p2.addScore(15);
-
-p3.addScore(5);
-p3.addScore(9);
-
-let array: Person[] = [p1, p2, p3];
+let array: Fighter[] = [Brandon_Moreno, Kai_Kara_France, Peter_Yan,TJ_Dillashaw ,Max_Holloway, Brian_Ortega,
+    Dustin_Poirier, Justin_Gaethje, Colby_Covington, Leon_Edwards, Robert_Whittaker, Jared_Cannonier, Jan_Blachowicz,
+    Jiri_Prochazka, Ciryl_Gane, Stipe_Miocic, Zhang_Weili];
 
 app.get('/', (req: Request, res: Response) => {
-    res.send({autor: 'Tomas Sromovsky'});
+    res.send(`Vyber si zápasnika:`);
+    res.send(array);
 });
 
-app.get('/users', (req: Request, res: Response) => {
+app.get('/choice', (req: Request, res: Response) => {
     const score = Number(req.query.withScore);
 
     console.log(score);
