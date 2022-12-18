@@ -24,11 +24,11 @@ let array: Player[] = [Carlos_Alcaraz, Rafael_Nadal, Casper_Ruud, Stefanos_Tsits
     Andrey_Rublev, Taylor_Fritz, Alexander_Zverev, Cameron_Norrie];
 
 app.get('/', (req: Request, res: Response) => {
-    res.send(`Choose a Player from the selection:`);
+    res.send(`Vyber hraca:`);
     res.send(array);
 });
 
-app.get('/choice', (req: Request, res: Response) => {
+app.get('/vyber', (req: Request, res: Response) => {
     let result = array;
     res.send(result.map(Player => {
         return {
