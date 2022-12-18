@@ -1,7 +1,5 @@
 import {Request, Response} from 'express';
-import {Person} from './Person';
-
-//test
+import {Plane} from "./Plane";
 
 const express = require('express');
 const port = 3000;
@@ -9,116 +7,87 @@ const port = 3000;
 const app = express();
 app.use(express.json());
 
-const p1 = new Person(1, "Tomas", 25);
-const p2 = new Person(2, "Filip", 15);
-const p3 = new Person(3, "David", 20);
+const pl1 = new Plane(1, 'Ryanair', 'Madrid' , 325);
+const pl2 = new Plane(2, 'Wizz Air' , 'Paríž' , 320);
+const pl3 = new Plane(3, 'Air Cairo', 'Rím' ,315);
+const pl4 = new Plane(4, 'Smartwings','New York',215);
+const pl5 = new Plane(5, 'Air Explore','Palma de Malorka',312,);
+const pl6 = new Plane(6, 'Air Jets','Štokholm',341);
+const pl7 = new Plane(7, 'Smartwings','Kodaň',221);
+const pl8 = new Plane(8, 'Air Cairo','Košice',141);
+const pl9 = new Plane(9, 'Ryanair','Zágreb',389);
+const pl10 = new Plane(10, 'Air Explore','Tokyo',327);
 
-p1.addScore(5);
-p1.addScore(9);
-p1.addScore(10);
 
-p2.addScore(5);
-p2.addScore(15);
-
-p3.addScore(5);
-p3.addScore(9);
-
-let array: Person[] = [p1, p2, p3];
+let array: Plane[] = [pl1, pl2, pl3, pl4, pl5, pl5, pl6, pl7, pl8, pl9, pl10];
 
 app.get('/', (req: Request, res: Response) => {
-    res.send({autor: 'Tomas Sromovsky'});
+    res.send({autor: "Andrej Čuvan"});
 });
 
-app.get('/users', (req: Request, res: Response) => {
-    const score = Number(req.query.withScore);
-
-    console.log(score);
-
-    let result;
-
-    if (score) {
-        result = array.filter(user => user.getScore().includes(score))
-    } else {
-        result = array;
-    }
-
-    res.send(result.map(user => {
-        return {
-            id: user.getId(),
-            name: user.getName()
-        }
-    }));
+app.get('/Plane', (req: Request, res: Response) => {
+    res.send(array);
 });
 
-app.get('/users/:id', (req: Request, res: Response) => {
+app.get('/Plane/:planeId', (req: Request, res: Response) => {
     const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user);
+    const au = array.find(au => au.getId() === id);
+    if (au) {
+        res.send(au);
     } else {
         res.send({});
     }
 });
 
-app.get('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
 
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user.getScore());
-    } else {
-        res.send('not found');
-    }
-});
 
-app.post('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        user.addScore(req.body.value);
-        res.send('DONE!');
-    } else {
-        res.send('not found');
-    }
-});
-
-app.put('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-
-            user.setName(req.body.name);
-            user.setAge(req.body.age);
-
-            res.send(`OK - user with id: ${user.getId()} UPDATED!`);
-        } else {
-            res.send(`Invalid value!`);
+app.get('/Plane//:arrival', (req: Request, res: Response) => {
+    const arrival = req.params.arrival;
+    const au = array.filter(au => au.getArrival() === arrival);
+    if (au.length == 0){
+        res.send('not found'); }
+    else {
+        if (au) {
+            res.send(au);
         }
-    } else {
-        res.send('User not found!');
+        else {
+            res.send('not found error');
+        }
     }
 });
 
-app.delete('/users/:id', (req: Request, res: Response) => {
+app.put('/Plane/:planeId', (req: Request, res: Response) => {
     const id = Number(req.params.id);
-
-    array = array.filter(user => user.getId() !== id);
-    res.send(`Id: ${id} DELETED!`);
+    const plane = array.find(autplane => autplane.getId() === id);
+    if (plane) {
+        plane.setId(req.body.id);
+        plane.setCompany(req.body.company);
+        plane.setArrival(req.body.arrival);
+        plane.setPassengers(req.body.passengers);
+        res.send(plane);
+    }
+    else {
+        res.send('autplane not found!');
+    }
 });
 
-app.post('/users', (req: Request, res: Response) => {
-    if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-        const id = array.length + 1;
-        const value = new Person(id ,req.body.name, req.body.age);
-        const index = array.push(value);
-        res.send(`OK - new id: ${id}`);
-    } else {
-        res.send(`Invalid value!`);
-    }
+app.delete('/Plane/:planeId', (req: Request, res: Response) => {
+    const planeId = Number(req.params.planeId);
+    array = array.filter(plane => plane.getId() !== planeId);
+    res.send(`TrackId: ${planeId} DELETED!`);
+});
+
+app.post('/Day-Schedule', (req: Request, res: Response) => {
+
+    const pl= new Plane( array.length + 1,
+        req.body.id,
+        req.body.company,
+        Number(req.body.passengers),
+    );
+    array.push(pl);
+    res.send(pl);
+
+    res.send(`OK - new planeId: ${array.length + 1}`);
 });
 
 app.listen(port, () => {

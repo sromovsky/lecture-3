@@ -1,4 +1,4 @@
-export class Person {
+/*export class Person {
     private id: number;
     private name: string;
     private age: number;
@@ -19,8 +19,8 @@ export class Person {
         return this.name;
     }
 
-    getAge() {
-        return this.age;
+//    getAge() {
+//        return this.age;
     }
 
     setName(name: string) {
@@ -39,3 +39,4 @@ export class Person {
         return this.score.push(value);
     }
 }
+ */
