@@ -35,7 +35,8 @@ export class Person {
         return this.score;
     }
 
-    addScore(value: number) {
+
+addScore(value: number) {
         return this.score.push(value);
     }
 }
