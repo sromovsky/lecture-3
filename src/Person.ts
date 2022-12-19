@@ -1,41 +1,52 @@
 export class Person {
-    private id: number;
-    private name: string;
-    private age: number;
-    private score: number[];
+    private Id: number;
+    private vyrobca: string;
+    private spz: string;
+    private kilometre: number;
+    private meno: string;
 
-    constructor(id: number, name: string, age: number) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.score = [];
+
+    constructor(Id: number, vyrobca: string, spz: string, kilometre: number, meno:string) {
+        this.Id = Id;
+        this.vyrobca= vyrobca;
+        this.spz = spz;
+        this.kilometre = kilometre;
+        this.meno = meno;
     }
 
     getId(): number {
-        return this.id;
+        return this.Id;
     }
 
-    getName() {
-        return this.name;
+    getvyrobca() {
+        return this.vyrobca;
     }
 
-    getAge() {
-        return this.age;
+    getspz() {
+        return this.spz;
     }
 
-    setName(name: string) {
-        this.name = name;
+    getkilometre() {
+        return this.kilometre;
+    }
+    getmeno() {
+        return this.meno;
+    }
+    setvyrobca(vyrobca: string) {
+        this.vyrobca = vyrobca;
     }
 
-    setAge(age: number) {
-        this.age = age;
+    setspz(spz: string) {
+        this.spz = spz;
     }
 
-    getScore() {
-        return this.score;
+    setkilometre(kilometre: number) {
+        this.kilometre = kilometre;
     }
 
-    addScore(value: number) {
-        return this.score.push(value);
+
+    setmeno(meno: string) {
+        this.meno = meno;
     }
+
 }

@@ -1,6 +1,5 @@
 import {Request, Response} from 'express';
-import {Person} from './Person';
-
+import {Person} from "./Person";
 
 const express = require('express');
 const port = 3000;
@@ -8,116 +7,85 @@ const port = 3000;
 const app = express();
 app.use(express.json());
 
-const p1 = new Person(1, "Tomas", 25);
-const p2 = new Person(2, "Filip", 15);
-const p3 = new Person(3, "David", 20);
+const p1 = new Person(1, "BMW" , "NZ645HK" , 30025,"Peter");
+const p2 = new Person(2, "Skoda" , "KN545GT" , 56620,"Karol");
+const p3 = new Person(3, "Opel", "BA345BG" ,89715,"Marta");
+const p4 = new Person(4, "Audi","BA321FR",120015,"Richard");
+const p5 = new Person(5, "Toyota","NR343",300012,"Ondrej");
+const p6 = new Person(6, "Skoda","KN387",30041,"Igor");
+const p7 = new Person(7, "Audi","NZ632",32145,"Robert");
+const p8 = new Person(8, "Subaru","KN213BT",50041,"Norbert");
 
-p1.addScore(5);
-p1.addScore(9);
-p1.addScore(10);
-
-p2.addScore(5);
-p2.addScore(15);
-
-p3.addScore(5);
-p3.addScore(9);
-
-let array: Person[] = [p1, p2, p3];
+let array: Person[] = [p1, p2, p3, p4, p5, p6, p7, p8];
 
 app.get('/', (req: Request, res: Response) => {
-    res.send({autor: 'Tomas Sromovsky'});
+    res.send({autor: "Viktor Halasz"});
 });
 
-app.get('/users', (req: Request, res: Response) => {
-    const score = Number(req.query.withScore);
-
-    console.log(score);
-
-    let result;
-
-    if (score) {
-        result = array.filter(user => user.getScore().includes(score))
-    } else {
-        result = array;
-    }
-
-    res.send(result.map(user => {
-        return {
-            id: user.getId(),
-            name: user.getName()
-        }
-    }));
+app.get('/Person', (req: Request, res: Response) => {
+    res.send(array);
 });
 
-app.get('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user);
+app.get('/Person/:Id', (req: Request, res: Response) => {
+    const Id = Number(req.params.trackId);
+    const au = array.find(au => au.getId() === Id);
+    if (au) {
+        res.send(au);
     } else {
         res.send({});
     }
 });
 
-app.get('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
 
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user.getScore());
-    } else {
-        res.send('not found');
-    }
-});
 
-app.post('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        user.addScore(req.body.value);
-        res.send('DONE!');
-    } else {
-        res.send('not found');
-    }
-});
-
-app.put('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-
-            user.setName(req.body.name);
-            user.setAge(req.body.age);
-
-            res.send(`OK - user with id: ${user.getId()} UPDATED!`);
-        } else {
-            res.send(`Invalid value!`);
+app.get('/Person//:vyrobca', (req: Request, res: Response) => {
+    const vyrobca = req.params.vyrobca;
+    const au = array.filter(au => au.getvyrobca() === vyrobca);
+    if (au.length == 0){
+        res.send('not found'); }
+    else {
+        if (au) {
+            res.send(au);
         }
-    } else {
-        res.send('User not found!');
+        else {
+            res.send('not found error');
+        }
     }
 });
 
-app.delete('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    array = array.filter(user => user.getId() !== id);
-    res.send(`Id: ${id} DELETED!`);
+app.put('/Person/:Id', (req: Request, res: Response) => {
+    const Id = Number(req.params.Id);
+    const autid = array.find(autid => autid.getId() === Id);
+    if (autid) {
+        autid.setvyrobca(req.body.vyrobca);
+        autid.setspz(req.body.spz);
+        autid.setkilometre(Number(req.body.kilometre));
+        autid.setmeno(req.body.meno);
+        res.send(autid);
+    }
+    else {
+        res.send('autid not found!');
+    }
 });
 
-app.post('/users', (req: Request, res: Response) => {
-    if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-        const id = array.length + 1;
-        const value = new Person(id ,req.body.name, req.body.age);
-        const index = array.push(value);
-        res.send(`OK - new id: ${id}`);
-    } else {
-        res.send(`Invalid value!`);
-    }
+app.delete('/Person/:Id', (req: Request, res: Response) => {
+    const Id = Number(req.params.Id);
+    array = array.filter(autid => autid.getId() !== Id);
+    res.send(`Id: ${Id} DELETED!`);
+});
+
+app.post('/Person', (req: Request, res: Response) => {
+
+    const pl= new Person( array.length + 1,
+        req.body.vyrobca,
+        req.body.spz,
+        Number(req.body.kilometre),
+        req.body.meno
+    );
+    array.push(pl);
+    res.send(pl);
+
+    res.send(`OK - new Id: ${array.length + 1}`);
 });
 
 app.listen(port, () => {
