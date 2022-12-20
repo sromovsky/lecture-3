@@ -38,6 +38,33 @@ app.get('/choice', (req: Request, res: Response) => {
     }));
 });
 
+app.post('/choice', (req: Request, res: Response) => {
+    if (req.body.name?.length >= 3 && req.body.age !== undefined && req.body.price !== undefined) {
+        const id = array.length + 1;
+        const value = new Cars(id, req.body.name, req.body.age, req.body.price);
+        const index = array.push(value);
+        res.send(`New car added! (ID ${id}`);
+    }
+    else {
+        res.send(`Invalid value!`);
+    }
+    })
+
+app.put('/choice/:id', (req: Request, res: Response) => {
+    const carsId = Number(req.params.id);
+    const cars = cars.find(cars => cars.getId() === carsId);
+    if (cars) {
+            cars.setId(req.body.id);
+            cars.setName(req.body.name);
+            cars.setAge(req.body.age);
+            cars.setPrice(req.body.price);
+            res.send(`Car with ID ${cars.getId()} successfully updated.`);
+        } else {
+            res.send(`Invalid value!`);
+        }
+    }
+});
+
 app.delete('/purchase', (req: Request, res: Response) => {
     const name = Number(req.params.name);
     array = array.filter(Cars => Cars.getName() == 'name');

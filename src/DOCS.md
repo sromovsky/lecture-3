@@ -1,13 +1,23 @@
-# Attendance system v1
+# Cars
 
 ---
 
-### GET - _Get all users_
-_https://localhost:3000/_
+### GET - _Get all cars_
+_https://localhost:3000/choice_
 
 ---
 
-### POST - _Create new user_
-_https://localhost:3000/_
+### POST - _Adding new cars_
+_https://localhost:3000/choice_
+
+---
+
+### PUT - _Editing cars information_
+_https://localhost:3000/choice/:id_
+
+---
+
+### DELETE - _Deleting cars_
+_https://localhost:3000/purchase_
 
 ---

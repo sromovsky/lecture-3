@@ -26,4 +26,20 @@ export class Cars {
     getPrice(): number {
         return this.price;
     }
+
+   setId(id: number) {
+        this.id = id;
+   }
+
+   setName(name: string) {
+        this.name = name;
+   }
+
+   setAge(age: number)  {
+        this.age = age;
+   }
+
+   setPrice(price: number) {
+        this.price = price;
+   }
 }
