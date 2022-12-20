@@ -1,126 +1,53 @@
-import {Request, Response} from 'express';
-import {Person} from './Person';
+class Match {
+    // atribúty zápasu
+    private team1: string;
+    private team2: string;
+    private score1: number;
+    private score2: number;
 
-//test
-
-const express = require('express');
-const port = 3000;
-
-const app = express();
-app.use(express.json());
-
-const p1 = new Person(1, "Tomas", 25);
-const p2 = new Person(2, "Filip", 15);
-const p3 = new Person(3, "David", 20);
-
-p1.addScore(5);
-p1.addScore(9);
-p1.addScore(10);
-
-p2.addScore(5);
-p2.addScore(15);
-
-p3.addScore(5);
-p3.addScore(9);
-
-let array: Person[] = [p1, p2, p3];
-
-app.get('/', (req: Request, res: Response) => {
-    res.send({autor: 'Tomas Sromovsky'});
-});
-
-app.get('/users', (req: Request, res: Response) => {
-    const score = Number(req.query.withScore);
-
-    console.log(score);
-
-    let result;
-
-    if (score) {
-        result = array.filter(user => user.getScore().includes(score))
-    } else {
-        result = array;
+    // konštruktor pre inicializáciu atribútov
+    constructor(team1: string, team2: string) {
+        this.team1 = team1;
+        this.team2 = team2;
+        this.score1 = 0;
+        this.score2 = 0;
     }
 
-    res.send(result.map(user => {
-        return {
-            id: user.getId(),
-            name: user.getName()
+    // metóda na získanie informácií o zápase
+    public getInfo(): string {
+        return `Zápas medzi tímami ${this.team1} a ${this.team2}`;
+    }
+
+    // metóda na aktualizáciu skóre
+    public updateScore(team: string, score: number): void {
+        if (team === this.team1) {
+            this.score1 += score;
+        } else if (team === this.team2) {
+            this.score2 += score;
         }
-    }));
-});
-
-app.get('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user);
-    } else {
-        res.send({});
     }
-});
 
-app.get('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user.getScore());
-    } else {
-        res.send('not found');
-    }
-});
-
-app.post('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        user.addScore(req.body.value);
-        res.send('DONE!');
-    } else {
-        res.send('not found');
-    }
-});
-
-app.put('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-
-            user.setName(req.body.name);
-            user.setAge(req.body.age);
-
-            res.send(`OK - user with id: ${user.getId()} UPDATED!`);
+    // metóda na zistenie výsledku zápasu alebo remízy
+    public getResult(): string {
+        if (this.score1 > this.score2) {
+            return `Výsledok zápasu je ${this.score1}:${this.score2} pre tím ${this.team1}`;
+        } else if (this.score2 > this.score1) {
+            return `Výsledok zápasu je ${this.score1}:${this.score2} pre tím ${this.team2}`;
         } else {
-            res.send(`Invalid value!`);
+            return "Zápas skončil remízou";
         }
-    } else {
-        res.send('User not found!');
     }
-});
+}
 
-app.delete('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+// vytvorenie nového zápasu s tímami Team1 a Team2
+const match = new Match("Team1", "Team2");
 
-    array = array.filter(user => user.getId() !== id);
-    res.send(`Id: ${id} DELETED!`);
-});
+// výpis informácií o zápase
+console.log(match.getInfo());
 
-app.post('/users', (req: Request, res: Response) => {
-    if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-        const id = array.length + 1;
-        const value = new Person(id ,req.body.name, req.body.age);
-        const index = array.push(value);
-        res.send(`OK - new id: ${id}`);
-    } else {
-        res.send(`Invalid value!`);
-    }
-});
+// aktualizácia skóre pre oba tímy
+match.updateScore("Team1", 3);
+match.updateScore("Team2", 2);
 
-app.listen(port, () => {
-    console.log(`⚡ [server]: Server is running at http://localhost:${port}`)
-});
+// výpis výsledku zápasu
+console.log(match.getResult());
