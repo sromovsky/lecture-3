@@ -39,7 +39,7 @@ app.get('/choice', (req: Request, res: Response) => {
 });
 
 // trasa pre zakúpenie notebooku
-app.delete('/purchase', (req: Request, res: Response) => {
+app.delete('/purchase/name:', (req: Request, res: Response) => {
     const name = Number(req.params.name);
     array = array.filter(notebook => notebook.getName() != name);
     res.send(`Name: ${name} The device is purchased!`);
