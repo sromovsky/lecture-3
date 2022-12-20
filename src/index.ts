@@ -1,53 +1,44 @@
-class Match {
-    // atribúty zápasu
-    private team1: string;
-    private team2: string;
-    private score1: number;
-    private score2: number;
+import { Request, Response } from 'express';
+import { Notebook } from './Notebook';
 
-    // konštruktor pre inicializáciu atribútov
-    constructor(team1: string, team2: string) {
-        this.team1 = team1;
-        this.team2 = team2;
-        this.score1 = 0;
-        this.score2 = 0;
-    }
+const express = require('express');
+const port = 3000;
 
-    // metóda na získanie informácií o zápase
-    public getInfo(): string {
-        return `Zápas medzi tímami ${this.team1} a ${this.team2}`;
-    }
+const app = express();
+app.use(express.json());
 
-    // metóda na aktualizáciu skóre
-    public updateScore(team: string, score: number): void {
-        if (team === this.team1) {
-            this.score1 += score;
-        } else if (team === this.team2) {
-            this.score2 += score;
+const Dell_Inspiron_15 = new Notebook(1, "Dell Inspiron 15", "black", 512, 859);
+const HP_Pavilion_15 = new Notebook(2, "HP Pavilion 15", "white", 1024, 854);
+const Lenovo_Thinkpad_14 = new Notebook(3, "Lenovo Thinkpad 14", "black", 2048, 999);
+const MacBook_Pro_16 = new Notebook(4, "MacBook Pro 16", "silver", 4096, 769);
+const Asus_Zenbook_14 = new Notebook(5, "Asus Zenbook 14", "gray", 8192, 999);
+
+let array: Notebook[] = [Dell_Inspiron_15, HP_Pavilion_15, Lenovo_Thinkpad_14, MacBook_Pro_16, Asus_Zenbook_14];
+
+app.get('/', (req: Request, res: Response) => {
+    res.send(`Choose a notebook from the selection:`);
+    res.send(array);
+});
+
+app.get('/choice', (req: Request, res: Response) => {
+    let result = array;
+    res.send(result.map(notebook => {
+        return {
+            name: notebook.getName(),
+            color: notebook.getColor(),
+            storage: notebook.getStorage(),
+            price: notebook.getPrice()
         }
-    }
+    }));
+});
 
-    // metóda na zistenie výsledku zápasu alebo remízy
-    public getResult(): string {
-        if (this.score1 > this.score2) {
-            return `Výsledok zápasu je ${this.score1}:${this.score2} pre tím ${this.team1}`;
-        } else if (this.score2 > this.score1) {
-            return `Výsledok zápasu je ${this.score1}:${this.score2} pre tím ${this.team2}`;
-        } else {
-            return "Zápas skončil remízou";
-        }
-    }
-}
+app.delete('/purchase', (req: Request, res: Response) => {
+    const name = Number(req.params.name);
+    array = array.filter(notebook => notebook.getName() != name);
+    res.send(`Name: ${name} The device is purchased!`);
+});
 
-// vytvorenie nového zápasu s tímami Team1 a Team2
-const match = new Match("Team1", "Team2");
+app.listen(port, () => {
+    console.log(`⚡ [server]: Server is running at http://localhost:${port}`)
+});
 
-// výpis informácií o zápase
-console.log(match.getInfo());
-
-// aktualizácia skóre pre oba tímy
-match.updateScore("Team1", 3);
-match.updateScore("Team2", 2);
-
-// výpis výsledku zápasu
-console.log(match.getResult());
