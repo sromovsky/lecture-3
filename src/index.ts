@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {Person} from './Person';
+import {Makeup} from './Makeup';
 
 //test
 
@@ -8,114 +8,101 @@ const port = 3000;
 
 const app = express();
 app.use(express.json());
-
-const p1 = new Person(1, "Tomas", 25);
-const p2 = new Person(2, "Filip", 15);
-const p3 = new Person(3, "David", 20);
-
-p1.addScore(5);
-p1.addScore(9);
-p1.addScore(10);
-
-p2.addScore(5);
-p2.addScore(15);
-
-p3.addScore(5);
-p3.addScore(9);
-
-let array: Person[] = [p1, p2, p3];
+const p1 = new Makeup(15, "Infaillible 24h Fresh Wear", 30, "Loreal"),
+    p2 = new Makeup(20, "Soft Pinch Liquid blush", 28, "Sephora"),
+    p3 = new Makeup (6 , "Rosy Touch", 34, "Avon")
+const makeupElement = Makeup[];
+array = [p1, p2, p3 ];
 
 app.get('/', (req: Request, res: Response) => {
-    res.send({autor: 'Tomas Sromovsky'});
+    res.send({autor: 'Infaillible 24h Fresh Wear'});
 });
 
-app.get('/users', (req: Request, res: Response) => {
-    const score = Number(req.query.withScore);
+app.get('/Makeup ', (req: Request, res: Response) => {
+    const teamName = String(req.query.withteamName);
 
-    console.log(score);
-
+    console.log(teamName);
     let result;
 
-    if (score) {
-        result = array.filter(user => user.getScore().includes(score))
-    } else {
-        result = array;
+    if (teamName) {
+        result = array.filter(Makeup => Makeup.getteamName().includes(teamName))
+    }else
+    {
+        result=array;
     }
-
-    res.send(result.map(user => {
+    res.send(result.map(Makeup => {
         return {
-            id: user.getId(),
-            name: user.getName()
+            position: Makeup.getMakeup(),
+            name: Makeup.getName()
         }
     }));
 });
 
-app.get('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user);
+app.get('/Makeup /:position', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
+    const user = array.find(Makeup => Makeup.getposition() === position);
+    if (Makeup) {
+        res.send(Makeup);
     } else {
         res.send({});
     }
 });
 
-app.get('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+app.get('/Makeup/:position/teamName', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
 
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        res.send(user.getScore());
+    const Makeup = array.find(Makeup => Makeup.getposition() === position);
+    if (Makeup) {
+        res.send(Makeup.getteamName());
     } else {
-        res.send('not found');
+        res.send('Not Found');
     }
 });
 
-app.post('/users/:id/score', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+app.post('/Makeup/:position/brand', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
 
-    const user = array.find(user => user.getId() === id);
-    if (user) {
-        user.addScore(req.body.value);
+    const Makeup = array.find(Makeup => Makeup.getposition() === position);
+    if (Makeup) {
+        Makeup.brand(req.body.value);
         res.send('DONE!');
     } else {
         res.send('not found');
     }
 });
 
-app.put('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+app.put('/Makeup/:position', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
 
-    const user = array.find(user => user.getId() === id);
-    if (user) {
+    const Makeup = array.find(Makeup => Makeup.getposition() === position);
+    if (Makeup) {
         if (req.body.name?.length >= 3 && req.body.age !== undefined) {
 
-            user.setName(req.body.name);
-            user.setAge(req.body.age);
+            Makeup.setName(req.body.name);
+            Makeup.setAge(req.body.age);
 
-            res.send(`OK - user with id: ${user.getId()} UPDATED!`);
+            res.send(`OK - Makeup with position: ${Makeup.getposition()} UPDATED!`);
         } else {
-            res.send(`Invalid value!`);
+            res.send(`Invalposition value!`);
         }
     } else {
-        res.send('User not found!');
+        res.send('Makeup not found!');
     }
 });
 
-app.delete('/users/:id', (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+app.delete('/Makeup/:position', (req: Request, res: Response) => {
+    const position = Number(req.params.position);
 
-    array = array.filter(user => user.getId() !== id);
-    res.send(`Id: ${id} DELETED!`);
+    array = array.filter(Makeup => Makeup.getposition() !== position);
+    res.send(`position: ${position} DELETED!`);
 });
 
-app.post('/users', (req: Request, res: Response) => {
+app.post('/Makeup/s', (req: Request, res: Response) => {
     if (req.body.name?.length >= 3 && req.body.age !== undefined) {
-        const id = array.length + 1;
-        const value = new Person(id ,req.body.name, req.body.age);
+        const position = array.length + 1;
+        const value = new Makeup(position ,req.body.name, req.body.age, req.teamName);
         const index = array.push(value);
-        res.send(`OK - new id: ${id}`);
+        res.send(`OK - new position: ${position}`);
     } else {
         res.send(`Invalid value!`);
     }
